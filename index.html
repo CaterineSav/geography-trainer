@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Тренажёр по географической номенклатуре — 7 класс</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f5f5f0;color:#1a1a1a}
+#map{width:100%;height:100vh;display:none}
+
+.login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,#e0e7ff 0%,#f0fdf4 100%);padding:20px}
+.login-card{background:#fff;border-radius:18px;box-shadow:0 8px 40px rgba(0,0,0,.1);padding:40px;max-width:400px;width:100%;text-align:center}
+.login-card h1{font-size:22px;font-weight:700;margin-bottom:4px}
+.login-card .sub{font-size:14px;color:#666;margin-bottom:24px}
+.login-card .emoji-top{font-size:48px;margin-bottom:12px}
+.field{margin-bottom:16px;text-align:left}
+.field label{font-size:13px;font-weight:600;color:#555;display:block;margin-bottom:4px}
+.field input{width:100%;padding:12px 14px;font-size:15px;border:1.5px solid #ddd;border-radius:10px;outline:none;transition:.15s}
+.field input:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.1)}
+.login-btn{width:100%;padding:14px;font-size:16px;font-weight:600;border:none;border-radius:10px;background:#2563eb;color:#fff;cursor:pointer;transition:.15s;margin-top:8px}
+.login-btn:hover{background:#1d4ed8}
+.login-btn:disabled{background:#ccc;cursor:default}
+.login-saved{margin-top:16px;padding:12px;background:#f8fafc;border-radius:10px;border:1px solid #e2e8f0}
+.login-saved p{font-size:13px;color:#64748b;margin-bottom:6px}
+.login-saved .name{font-weight:600;color:#1a1a1a;font-size:15px}
+.login-saved button{margin-top:8px;padding:6px 14px;font-size:12px;border:1px solid #ddd;border-radius:6px;background:#fff;cursor:pointer}
+
+.panel{position:absolute;top:12px;left:60px;z-index:1000;background:#fff;border-radius:14px;box-shadow:0 4px 24px rgba(0,0,0,.12);padding:20px;max-width:400px;width:calc(100% - 80px);max-height:calc(100vh - 24px);overflow-y:auto}
+.panel h1{font-size:18px;font-weight:600;margin-bottom:4px}
+.panel .sub{font-size:13px;color:#666;margin-bottom:16px}
+.user-badge{display:inline-flex;align-items:center;gap:6px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:20px;padding:4px 12px 4px 8px;font-size:12px;color:#166534;margin-bottom:12px}
+.user-badge .avatar{width:20px;height:20px;border-radius:50%;background:#16a34a;color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700}
+.user-badge .logout{margin-left:4px;cursor:pointer;opacity:.5;font-size:14px}
+.user-badge .logout:hover{opacity:1}
+
+.section-label{font-size:12px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.cat-grid{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+.cat-btn{padding:6px 12px;font-size:12px;border:1px solid #ddd;border-radius:20px;background:#fff;cursor:pointer;transition:.15s;white-space:nowrap}
+.cat-btn:hover{background:#f0f0f0}
+.cat-btn.active{background:#2563eb;color:#fff;border-color:#2563eb}
+.cat-btn .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px;vertical-align:middle}
+
+.mode-row{display:flex;gap:8px;margin-bottom:16px}
+.mode-card{flex:1;padding:14px;border:2px solid #eee;border-radius:12px;cursor:pointer;text-align:center;transition:.15s}
+.mode-card:hover{border-color:#bbb}
+.mode-card.active{border-color:#2563eb;background:#eff6ff}
+.mode-card .icon{font-size:24px;margin-bottom:4px}
+.mode-card .label{font-size:14px;font-weight:600}
+.mode-card .desc{font-size:11px;color:#888;margin-top:2px}
+
+.start-btn{width:100%;padding:12px;font-size:15px;font-weight:600;border:none;border-radius:10px;background:#2563eb;color:#fff;cursor:pointer;transition:.15s}
+.start-btn:hover{background:#1d4ed8}
+.start-btn:disabled{background:#ccc;cursor:default}
+
+.top-bar{position:absolute;top:12px;left:60px;z-index:1000;background:#fff;border-radius:14px;box-shadow:0 4px 24px rgba(0,0,0,.12);padding:16px 20px;max-width:420px;width:calc(100% - 80px)}
+.top-bar-row{display:flex;align-items:center;gap:12px}
+.top-bar .home-btn{width:36px;height:36px;border-radius:8px;border:1px solid #ddd;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;transition:.15s}
+.top-bar .home-btn:hover{background:#f0f0f0}
+.top-bar .info{flex:1;min-width:0}
+.top-bar .title{font-size:15px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.top-bar .subtitle{font-size:12px;color:#888}
+
+.q-bar{height:3px;background:#eee;border-radius:2px;margin-top:10px;overflow:hidden}
+.q-fill{height:100%;background:#2563eb;transition:width .3s}
+.q-text{font-size:17px;font-weight:600;margin-top:12px;line-height:1.4}
+.q-hint{font-size:13px;color:#888;margin-top:2px;margin-bottom:6px}
+.q-feedback{padding:10px 14px;border-radius:8px;font-size:14px;margin-top:8px;display:none}
+.q-feedback.ok{display:block;background:#ecfdf5;color:#065f46;border:1px solid #a7f3d0}
+.q-feedback.fail{display:block;background:#fef2f2;color:#991b1b;border:1px solid #fecaca}
+.q-next{margin-top:8px;padding:10px 20px;font-size:14px;font-weight:500;border:1px solid #ddd;border-radius:8px;background:#fff;cursor:pointer}
+.q-next:hover{background:#f5f5f5}
+
+.score-panel{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:1000;background:#fff;border-radius:18px;box-shadow:0 8px 40px rgba(0,0,0,.18);padding:32px 40px;text-align:center;min-width:320px;max-width:420px}
+.score-panel .big{font-size:48px;font-weight:700;color:#2563eb;margin-bottom:4px}
+.score-panel .lbl{font-size:14px;color:#888;margin-bottom:16px}
+.score-panel .msg{font-size:16px;margin-bottom:20px;line-height:1.5}
+.score-panel button{padding:10px 24px;font-size:14px;font-weight:500;border:1px solid #ddd;border-radius:8px;background:#fff;cursor:pointer;margin:4px}
+.score-panel button.primary{background:#2563eb;color:#fff;border-color:#2563eb}
+.mistakes-box{text-align:left;margin-top:16px;max-height:200px;overflow-y:auto}
+.mistakes-box .mi{padding:6px 0;border-bottom:1px solid #f0f0f0;font-size:13px}
+.mistakes-box .mi span{color:#dc2626}
+.sending-note{font-size:12px;color:#888;margin-top:8px}
+
+.pin-default{border:3px solid #fff;border-radius:50%;width:18px;height:18px;box-shadow:0 2px 6px rgba(0,0,0,.3);cursor:pointer;transition:transform .15s}
+.pin-default:hover{transform:scale(1.3)}
+.pin-correct{background:#16a34a !important;border-color:#fff !important;animation:popIn .3s}
+.pin-wrong{background:#dc2626 !important;border-color:#fff !important;animation:shake .4s}
+.pin-target{background:#f59e0b !important;border-color:#fff !important;animation:pulse 1s infinite}
+.pin-dim{opacity:0.3 !important}
+@keyframes popIn{0%{transform:scale(0.5)}50%{transform:scale(1.3)}100%{transform:scale(1)}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.2)}}
+
+.leaflet-popup-content{font-family:inherit;font-size:13px;margin:8px 12px}
+.leaflet-popup-content strong{font-weight:600}
+.tooltip-name{background:#1a1a1a;color:#fff;border:none;border-radius:6px;padding:4px 10px;font-size:12px;font-weight:500;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.tooltip-name::before{border-top-color:#1a1a1a !important}
+.study-label{background:rgba(255,255,255,0.92);color:#1a1a1a;border:1px solid rgba(0,0,0,0.15);border-radius:4px;padding:2px 7px;font-size:11px;font-weight:600;box-shadow:0 1px 4px rgba(0,0,0,.1);white-space:nowrap}
+.study-label::before{display:none !important}
+
+.legend{position:absolute;bottom:24px;right:12px;z-index:1000;background:#fff;border-radius:10px;box-shadow:0 2px 12px rgba(0,0,0,.1);padding:12px 14px;font-size:12px;max-height:calc(100vh - 100px);overflow-y:auto}
+.legend .leg-title{font-weight:600;margin-bottom:6px;font-size:13px}
+.legend .leg-item{display:flex;align-items:center;gap:6px;padding:2px 0}
+.legend .leg-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.legend .leg-count{color:#888;margin-left:auto;padding-left:8px}
+</style>
+</head>
+<body>
+
+<div id="loginScreen" class="login-screen">
+<div class="login-card">
+<div class="emoji-top">&#127758;</div>
+<h1>Географическая номенклатура</h1>
+<p class="sub">Тренажёр для 7 класса</p>
+<div id="loginForm">
+<div class="field">
+<label>Фамилия</label>
+<input type="text" id="inSurname" placeholder="Иванов" autocomplete="off">
+</div>
+<div class="field">
+<label>Имя</label>
+<input type="text" id="inName" placeholder="Александр" autocomplete="off">
+</div>
+<div class="field">
+<label>Класс</label>
+<input type="text" id="inClass" placeholder="7-А" autocomplete="off">
+</div>
+<button class="login-btn" id="loginBtn" disabled>Войти</button>
+</div>
+<div id="savedUser" class="login-saved" style="display:none"></div>
+</div>
+</div>
+
+<div id="map"></div>
+<div id="ui"></div>
+
+<script>
+// ========== НАСТРОЙКА ==========
+// Вставьте URL вашего Google Apps Script (веб-приложения) ниже:
+const SCRIPT_URL = '';
+// ================================
+
+const GEO = [
+{name:"Амазонская низменность",cat:"равнины",topic:"Литосфера",lat:-3.0,lng:-60.0},
+{name:"Великая Китайская равнина",cat:"равнины",topic:"Литосфера",lat:35.0,lng:117.0},
+{name:"Великие равнины",cat:"равнины",topic:"Литосфера",lat:42.0,lng:-102.0},
+{name:"Восточно-Европейская равнина",cat:"равнины",topic:"Литосфера",lat:55.0,lng:40.0},
+{name:"Западно-Сибирская равнина",cat:"равнины",topic:"Литосфера",lat:62.0,lng:70.0},
+{name:"Среднесибирское плоскогорье",cat:"равнины",topic:"Литосфера",lat:64.0,lng:100.0},
+{name:"Декан",cat:"равнины",topic:"Евразия",lat:18.0,lng:77.0},
+{name:"Индо-Гангская низменность",cat:"равнины",topic:"Евразия",lat:27.0,lng:80.0},
+{name:"Месопотамская низменность",cat:"равнины",topic:"Евразия",lat:32.0,lng:45.0},
+{name:"Туранская низменность",cat:"равнины",topic:"Евразия",lat:42.0,lng:58.0},
+{name:"Бразильское плоскогорье",cat:"равнины",topic:"Южная Америка",lat:-14.0,lng:-47.0},
+{name:"Патагонское плато",cat:"равнины",topic:"Южная Америка",lat:-46.0,lng:-69.0},
+{name:"Центральная низменность",cat:"равнины",topic:"Австралия",lat:-26.0,lng:135.0},
+{name:"Большой Бассейн",cat:"равнины",topic:"Северная Америка",lat:40.0,lng:-117.0},
+{name:"Миссисипская низменность",cat:"равнины",topic:"Северная Америка",lat:33.0,lng:-91.0},
+{name:"Восточно-Африканское плоскогорье",cat:"равнины",topic:"Африка",lat:-4.0,lng:34.0},
+{name:"Альпы",cat:"горы",topic:"Литосфера",lat:46.8,lng:10.0},
+{name:"Анды",cat:"горы",topic:"Литосфера",lat:-15.0,lng:-70.0},
+{name:"Гималаи",cat:"горы",topic:"Литосфера",lat:28.0,lng:85.0},
+{name:"Кавказ",cat:"горы",topic:"Литосфера",lat:42.5,lng:44.5},
+{name:"Кордильеры",cat:"горы",topic:"Литосфера",lat:50.0,lng:-118.0},
+{name:"Тибет",cat:"горы",topic:"Литосфера",lat:32.0,lng:87.0},
+{name:"Уральские горы",cat:"горы",topic:"Литосфера",lat:57.0,lng:59.5},
+{name:"Эфиопское нагорье",cat:"горы",topic:"Литосфера",lat:9.0,lng:39.0},
+{name:"Аппалачи",cat:"горы",topic:"Северная Америка",lat:37.0,lng:-80.0},
+{name:"Скалистые горы",cat:"горы",topic:"Северная Америка",lat:45.0,lng:-113.0},
+{name:"Сьерра-Невада",cat:"горы",topic:"Северная Америка",lat:37.5,lng:-119.5},
+{name:"Мексиканское нагорье",cat:"горы",topic:"Северная Америка",lat:23.0,lng:-103.0},
+{name:"Большой Водораздельный хребет",cat:"горы",topic:"Австралия",lat:-30.0,lng:149.0},
+{name:"Атлас",cat:"горы",topic:"Африка",lat:33.0,lng:1.0},
+{name:"Драконовы горы",cat:"горы",topic:"Африка",lat:-29.5,lng:29.5},
+{name:"Памир",cat:"горы",topic:"Евразия",lat:38.5,lng:73.0},
+{name:"Тянь-Шань",cat:"горы",topic:"Евразия",lat:42.0,lng:77.0},
+{name:"Куньлунь",cat:"горы",topic:"Евразия",lat:36.0,lng:84.0},
+{name:"Иранское нагорье",cat:"горы",topic:"Евразия",lat:33.0,lng:54.0},
+{name:"Аконкагуа",cat:"вершины",topic:"Литосфера",lat:-32.65,lng:-70.01},
+{name:"Джомолунгма (Эверест)",cat:"вершины",topic:"Литосфера",lat:27.99,lng:86.93},
+{name:"Мак-Кинли (Денали)",cat:"вершины",topic:"Литосфера",lat:63.07,lng:-151.01},
+{name:"Монблан",cat:"вершины",topic:"Литосфера",lat:45.83,lng:6.87},
+{name:"Эльбрус",cat:"вершины",topic:"Литосфера",lat:43.35,lng:42.44},
+{name:"Народная",cat:"вершины",topic:"Литосфера",lat:65.03,lng:60.12},
+{name:"гора Косцюшко",cat:"вершины",topic:"Австралия",lat:-36.46,lng:148.26},
+{name:"массив Винсон",cat:"вершины",topic:"Антарктида",lat:-78.53,lng:-85.62},
+{name:"Килиманджаро",cat:"вулканы",topic:"Литосфера",lat:-3.07,lng:37.35},
+{name:"Ключевская Сопка",cat:"вулканы",topic:"Литосфера",lat:56.06,lng:160.64},
+{name:"Котопахи",cat:"вулканы",topic:"Литосфера",lat:-0.68,lng:-78.44},
+{name:"Орисаба",cat:"вулканы",topic:"Литосфера",lat:19.03,lng:-97.27},
+{name:"Фудзияма",cat:"вулканы",topic:"Литосфера",lat:35.36,lng:138.73},
+{name:"Эребус",cat:"вулканы",topic:"Антарктида",lat:-77.53,lng:167.17},
+{name:"Кракатау",cat:"вулканы",topic:"Евразия",lat:-6.1,lng:105.42},
+{name:"Амазонка",cat:"реки",topic:"Гидросфера",lat:-3.13,lng:-59.98},
+{name:"Волга",cat:"реки",topic:"Гидросфера",lat:54.0,lng:49.0},
+{name:"Ганг",cat:"реки",topic:"Гидросфера",lat:25.5,lng:83.0},
+{name:"Дунай",cat:"реки",topic:"Гидросфера",lat:47.5,lng:19.0},
+{name:"Енисей",cat:"реки",topic:"Гидросфера",lat:60.0,lng:92.0},
+{name:"Инд",cat:"реки",topic:"Гидросфера",lat:27.0,lng:68.5},
+{name:"Лена",cat:"реки",topic:"Гидросфера",lat:63.0,lng:125.0},
+{name:"Миссисипи",cat:"реки",topic:"Гидросфера",lat:35.0,lng:-90.0},
+{name:"Нил",cat:"реки",topic:"Гидросфера",lat:25.0,lng:32.8},
+{name:"Обь",cat:"реки",topic:"Гидросфера",lat:58.0,lng:69.0},
+{name:"Парана",cat:"реки",topic:"Гидросфера",lat:-25.0,lng:-57.5},
+{name:"Хуанхэ",cat:"реки",topic:"Гидросфера",lat:36.0,lng:110.0},
+{name:"Янцзы",cat:"реки",topic:"Гидросфера",lat:30.5,lng:113.0},
+{name:"Конго",cat:"реки",topic:"Африка",lat:-2.0,lng:21.0},
+{name:"Нигер",cat:"реки",topic:"Африка",lat:12.0,lng:3.0},
+{name:"Замбези",cat:"реки",topic:"Африка",lat:-15.5,lng:28.0},
+{name:"Лимпопо",cat:"реки",topic:"Африка",lat:-23.5,lng:30.0},
+{name:"Оранжевая",cat:"реки",topic:"Африка",lat:-29.0,lng:23.0},
+{name:"Сенегал",cat:"реки",topic:"Африка",lat:14.5,lng:-14.0},
+{name:"Амур",cat:"реки",topic:"Евразия",lat:50.0,lng:132.0},
+{name:"Меконг",cat:"реки",topic:"Евразия",lat:15.0,lng:105.5},
+{name:"Рейн",cat:"реки",topic:"Евразия",lat:50.0,lng:7.5},
+{name:"Тигр",cat:"реки",topic:"Евразия",lat:35.0,lng:43.0},
+{name:"Евфрат",cat:"реки",topic:"Евразия",lat:35.5,lng:39.0},
+{name:"Брахмапутра",cat:"реки",topic:"Евразия",lat:26.5,lng:91.0},
+{name:"Сырдарья",cat:"реки",topic:"Евразия",lat:42.5,lng:66.0},
+{name:"Амударья",cat:"реки",topic:"Евразия",lat:40.0,lng:62.0},
+{name:"Муррей",cat:"реки",topic:"Австралия",lat:-34.5,lng:142.0},
+{name:"Дарлинг",cat:"реки",topic:"Австралия",lat:-31.0,lng:145.0},
+{name:"Ориноко",cat:"реки",topic:"Южная Америка",lat:8.5,lng:-63.0},
+{name:"Арканзас",cat:"реки",topic:"Северная Америка",lat:36.0,lng:-96.0},
+{name:"Колорадо",cat:"реки",topic:"Северная Америка",lat:36.1,lng:-111.8},
+{name:"Макензи",cat:"реки",topic:"Северная Америка",lat:65.0,lng:-128.0},
+{name:"Миссури",cat:"реки",topic:"Северная Америка",lat:41.0,lng:-96.0},
+{name:"Юкон",cat:"реки",topic:"Северная Америка",lat:63.0,lng:-145.0},
+{name:"Святого Лаврентия",cat:"реки",topic:"Северная Америка",lat:47.0,lng:-71.0},
+{name:"Байкал",cat:"озёра",topic:"Гидросфера",lat:53.5,lng:108.0},
+{name:"Виктория",cat:"озёра",topic:"Гидросфера",lat:-1.0,lng:33.0},
+{name:"Каспийское море",cat:"озёра",topic:"Гидросфера",lat:42.0,lng:51.0},
+{name:"Танганьика",cat:"озёра",topic:"Гидросфера",lat:-6.0,lng:29.5},
+{name:"Ладожское озеро",cat:"озёра",topic:"Гидросфера",lat:61.0,lng:31.5},
+{name:"Титикака",cat:"озёра",topic:"Южная Америка",lat:-15.83,lng:-69.33},
+{name:"Маракайбо",cat:"озёра",topic:"Южная Америка",lat:9.8,lng:-71.5},
+{name:"Верхнее",cat:"озёра",topic:"Северная Америка",lat:47.5,lng:-87.5},
+{name:"Мичиган",cat:"озёра",topic:"Северная Америка",lat:44.0,lng:-87.0},
+{name:"Гурон",cat:"озёра",topic:"Северная Америка",lat:44.8,lng:-82.0},
+{name:"Эри",cat:"озёра",topic:"Северная Америка",lat:42.2,lng:-81.2},
+{name:"Онтарио",cat:"озёра",topic:"Северная Америка",lat:43.7,lng:-77.8},
+{name:"Большое Медвежье",cat:"озёра",topic:"Северная Америка",lat:65.8,lng:-121.0},
+{name:"Виннипег",cat:"озёра",topic:"Северная Америка",lat:52.0,lng:-97.5},
+{name:"Аральское море",cat:"озёра",topic:"Евразия",lat:45.0,lng:59.5},
+{name:"Мёртвое море",cat:"озёра",topic:"Евразия",lat:31.5,lng:35.5},
+{name:"Чад",cat:"озёра",topic:"Африка",lat:13.0,lng:14.0},
+{name:"Ньяса",cat:"озёра",topic:"Африка",lat:-12.0,lng:34.5},
+{name:"Эйр",cat:"озёра",topic:"Австралия",lat:-28.4,lng:137.4},
+{name:"Средиземное море",cat:"моря",topic:"Гидросфера",lat:35.5,lng:18.0},
+{name:"Красное море",cat:"моря",topic:"Гидросфера",lat:20.0,lng:38.5},
+{name:"Берингово море",cat:"моря",topic:"Гидросфера",lat:60.0,lng:-177.0},
+{name:"Балтийское море",cat:"моря",topic:"Гидросфера",lat:58.0,lng:20.0},
+{name:"Южно-Китайское море",cat:"моря",topic:"Гидросфера",lat:14.0,lng:114.0},
+{name:"Филиппинское море",cat:"моря",topic:"Гидросфера",lat:20.0,lng:135.0},
+{name:"Тасманово море",cat:"моря",topic:"Гидросфера",lat:-37.0,lng:160.0},
+{name:"Чёрное море",cat:"моря",topic:"Евразия",lat:43.5,lng:34.0},
+{name:"Японское море",cat:"моря",topic:"Евразия",lat:40.0,lng:134.0},
+{name:"Аравийское море",cat:"моря",topic:"Евразия",lat:16.0,lng:64.0},
+{name:"Карибское море",cat:"моря",topic:"Северная Америка",lat:15.0,lng:-75.0},
+{name:"Коралловое море",cat:"моря",topic:"Австралия",lat:-18.0,lng:155.0},
+{name:"Охотское море",cat:"моря",topic:"Евразия",lat:55.0,lng:150.0},
+{name:"Норвежское море",cat:"моря",topic:"Евразия",lat:67.0,lng:3.0},
+{name:"Северное море",cat:"моря",topic:"Евразия",lat:56.0,lng:3.5},
+{name:"Баренцево море",cat:"моря",topic:"Евразия",lat:74.0,lng:36.0},
+{name:"Карское море",cat:"моря",topic:"Евразия",lat:76.0,lng:75.0},
+{name:"море Лаптевых",cat:"моря",topic:"Евразия",lat:76.0,lng:126.0},
+{name:"Восточно-Сибирское море",cat:"моря",topic:"Гидросфера",lat:73.0,lng:163.0},
+{name:"море Амундсена",cat:"моря",topic:"Антарктида",lat:-73.0,lng:-115.0},
+{name:"море Беллинсгаузена",cat:"моря",topic:"Антарктида",lat:-71.0,lng:-85.0},
+{name:"море Росса",cat:"моря",topic:"Антарктида",lat:-75.0,lng:175.0},
+{name:"море Уэдделла",cat:"моря",topic:"Антарктида",lat:-73.0,lng:-45.0},
+{name:"Арафурское море",cat:"моря",topic:"Австралия",lat:-10.0,lng:135.0},
+{name:"Гренландия",cat:"острова",topic:"Гидросфера",lat:72.0,lng:-40.0},
+{name:"Мадагаскар",cat:"острова",topic:"Гидросфера",lat:-19.0,lng:46.5},
+{name:"Калимантан",cat:"острова",topic:"Гидросфера",lat:1.0,lng:114.0},
+{name:"Суматра",cat:"острова",topic:"Гидросфера",lat:0.0,lng:102.0},
+{name:"Новая Гвинея",cat:"острова",topic:"Гидросфера",lat:-5.5,lng:141.0},
+{name:"Великобритания",cat:"острова",topic:"Гидросфера",lat:54.0,lng:-2.0},
+{name:"Исландия",cat:"острова",topic:"Гидросфера",lat:65.0,lng:-18.5},
+{name:"Новая Зеландия",cat:"острова",topic:"Гидросфера",lat:-42.0,lng:173.0},
+{name:"Японские о-ва",cat:"острова",topic:"Гидросфера",lat:36.0,lng:138.0},
+{name:"Сахалин",cat:"острова",topic:"Гидросфера",lat:50.5,lng:143.0},
+{name:"Шри-Ланка",cat:"острова",topic:"Евразия",lat:7.5,lng:80.7},
+{name:"Ява",cat:"острова",topic:"Евразия",lat:-7.5,lng:110.0},
+{name:"Тасмания",cat:"острова",topic:"Австралия",lat:-42.0,lng:146.5},
+{name:"Куба",cat:"острова",topic:"Северная Америка",lat:22.0,lng:-79.5},
+{name:"Огненная Земля",cat:"острова",topic:"Южная Америка",lat:-54.0,lng:-69.0},
+{name:"Кипр",cat:"острова",topic:"Евразия",lat:35.1,lng:33.4},
+{name:"Тайвань",cat:"острова",topic:"Евразия",lat:23.7,lng:121.0},
+{name:"Галапагос",cat:"острова",topic:"Южная Америка",lat:-0.8,lng:-91.1},
+{name:"Гавайские о-ва",cat:"острова",topic:"Тихий океан",lat:20.5,lng:-157.0},
+{name:"Курильские о-ва",cat:"острова",topic:"Тихий океан",lat:46.0,lng:150.5},
+{name:"Шпицберген",cat:"острова",topic:"Сев. Ледовитый океан",lat:78.0,lng:16.0},
+{name:"Новая Земля",cat:"острова",topic:"Сев. Ледовитый океан",lat:74.0,lng:56.0},
+{name:"Аравийский п-ов",cat:"полуострова",topic:"Гидросфера",lat:23.0,lng:45.0},
+{name:"Индостан",cat:"полуострова",topic:"Гидросфера",lat:18.0,lng:78.0},
+{name:"Камчатка",cat:"полуострова",topic:"Гидросфера",lat:56.0,lng:160.0},
+{name:"Лабрадор",cat:"полуострова",topic:"Гидросфера",lat:54.0,lng:-62.0},
+{name:"Скандинавский п-ов",cat:"полуострова",topic:"Гидросфера",lat:63.0,lng:15.0},
+{name:"Сомали",cat:"полуострова",topic:"Гидросфера",lat:7.0,lng:47.0},
+{name:"Таймыр",cat:"полуострова",topic:"Гидросфера",lat:75.0,lng:100.0},
+{name:"Индокитай",cat:"полуострова",topic:"Евразия",lat:15.0,lng:103.0},
+{name:"Малая Азия",cat:"полуострова",topic:"Евразия",lat:39.0,lng:33.0},
+{name:"Пиренейский п-ов",cat:"полуострова",topic:"Евразия",lat:40.0,lng:-4.0},
+{name:"Апеннинский п-ов",cat:"полуострова",topic:"Евразия",lat:42.0,lng:13.0},
+{name:"Корея",cat:"полуострова",topic:"Евразия",lat:37.0,lng:127.5},
+{name:"Крымский п-ов",cat:"полуострова",topic:"Евразия",lat:45.0,lng:34.0},
+{name:"Малакка",cat:"полуострова",topic:"Евразия",lat:4.0,lng:102.0},
+{name:"Аляска",cat:"полуострова",topic:"Северная Америка",lat:64.0,lng:-153.0},
+{name:"Флорида",cat:"полуострова",topic:"Северная Америка",lat:27.5,lng:-81.5},
+{name:"Юкатан",cat:"полуострова",topic:"Северная Америка",lat:19.5,lng:-89.0},
+{name:"Калифорния",cat:"полуострова",topic:"Северная Америка",lat:28.0,lng:-113.5},
+{name:"Антарктический п-ов",cat:"полуострова",topic:"Антарктида",lat:-67.0,lng:-63.0},
+{name:"Гибралтарский прол.",cat:"проливы",topic:"Гидросфера",lat:35.95,lng:-5.6},
+{name:"Берингов прол.",cat:"проливы",topic:"Гидросфера",lat:65.75,lng:-169.0},
+{name:"Магелланов прол.",cat:"проливы",topic:"Гидросфера",lat:-53.5,lng:-70.5},
+{name:"Пролив Дрейка",cat:"проливы",topic:"Гидросфера",lat:-60.0,lng:-65.0},
+{name:"Мозамбикский прол.",cat:"проливы",topic:"Гидросфера",lat:-17.0,lng:42.0},
+{name:"Босфор",cat:"проливы",topic:"Евразия",lat:41.1,lng:29.05},
+{name:"Ла-Манш",cat:"проливы",topic:"Евразия",lat:50.5,lng:-1.0},
+{name:"Малаккский прол.",cat:"проливы",topic:"Евразия",lat:3.0,lng:101.0},
+{name:"Баб-эль-Мандебский прол.",cat:"проливы",topic:"Евразия",lat:12.6,lng:43.3},
+{name:"Басов прол.",cat:"проливы",topic:"Австралия",lat:-39.5,lng:145.0},
+{name:"Торресов прол.",cat:"проливы",topic:"Австралия",lat:-10.0,lng:142.2},
+{name:"Флоридский прол.",cat:"проливы",topic:"Северная Америка",lat:24.5,lng:-81.0},
+{name:"Бенгальский залив",cat:"заливы",topic:"Гидросфера",lat:14.0,lng:88.0},
+{name:"Мексиканский залив",cat:"заливы",topic:"Гидросфера",lat:25.0,lng:-90.0},
+{name:"Гвинейский залив",cat:"заливы",topic:"Гидросфера",lat:3.0,lng:3.0},
+{name:"Гудзонов залив",cat:"заливы",topic:"Гидросфера",lat:60.0,lng:-85.0},
+{name:"Большой Австралийский зал.",cat:"заливы",topic:"Гидросфера",lat:-34.0,lng:130.0},
+{name:"Финский залив",cat:"заливы",topic:"Гидросфера",lat:60.0,lng:27.0},
+{name:"Персидский залив",cat:"заливы",topic:"Евразия",lat:27.0,lng:51.0},
+{name:"Бискайский залив",cat:"заливы",topic:"Евразия",lat:45.0,lng:-5.0},
+{name:"Аденский залив",cat:"заливы",topic:"Африка",lat:12.5,lng:47.0},
+{name:"залив Карпентария",cat:"заливы",topic:"Австралия",lat:-14.0,lng:139.0},
+{name:"залив Аляска",cat:"заливы",topic:"Северная Америка",lat:58.0,lng:-150.0},
+{name:"Суэцкий канал",cat:"каналы",topic:"Африка",lat:30.5,lng:32.3},
+{name:"Панамский канал",cat:"каналы",topic:"Южная Америка",lat:9.1,lng:-79.7},
+{name:"Сахара",cat:"пустыни",topic:"Африка",lat:23.0,lng:10.0},
+{name:"Калахари",cat:"пустыни",topic:"Африка",lat:-23.0,lng:22.0},
+{name:"Намиб",cat:"пустыни",topic:"Африка",lat:-24.0,lng:15.5},
+{name:"Ливийская",cat:"пустыни",topic:"Африка",lat:25.0,lng:23.0},
+{name:"Атакама",cat:"пустыни",topic:"Южная Америка",lat:-24.5,lng:-69.5},
+{name:"Гоби",cat:"пустыни",topic:"Евразия",lat:43.0,lng:105.0},
+{name:"Каракумы",cat:"пустыни",topic:"Евразия",lat:39.0,lng:59.0},
+{name:"Такла-Макан",cat:"пустыни",topic:"Евразия",lat:39.0,lng:83.0},
+{name:"Тар",cat:"пустыни",topic:"Евразия",lat:26.5,lng:71.0},
+{name:"Руб-эль-Хали",cat:"пустыни",topic:"Евразия",lat:20.0,lng:50.0},
+{name:"Большая Песчаная",cat:"пустыни",topic:"Австралия",lat:-21.0,lng:125.0},
+{name:"Большая пустыня Виктория",cat:"пустыни",topic:"Австралия",lat:-29.0,lng:129.0},
+{name:"мыс Бен-Секка",cat:"крайние точки",topic:"Африка",lat:37.35,lng:9.87},
+{name:"мыс Игольный",cat:"крайние точки",topic:"Африка",lat:-34.83,lng:20.0},
+{name:"мыс Альмади",cat:"крайние точки",topic:"Африка",lat:14.73,lng:-17.53},
+{name:"мыс Рас-Хафун",cat:"крайние точки",topic:"Африка",lat:10.44,lng:51.41},
+{name:"мыс Йорк",cat:"крайние точки",topic:"Австралия",lat:-10.69,lng:142.53},
+{name:"мыс Стип-Пойнт",cat:"крайние точки",topic:"Австралия",lat:-26.15,lng:113.16},
+{name:"мыс Байрон",cat:"крайние точки",topic:"Австралия",lat:-28.64,lng:153.64},
+{name:"мыс Юго-Восточный",cat:"крайние точки",topic:"Австралия",lat:-39.14,lng:146.37},
+{name:"мыс Челюскин",cat:"крайние точки",topic:"Евразия",lat:77.72,lng:104.25},
+{name:"мыс Пиай",cat:"крайние точки",topic:"Евразия",lat:1.27,lng:103.47},
+{name:"мыс Рока",cat:"крайние точки",topic:"Евразия",lat:38.78,lng:-9.5},
+{name:"мыс Дежнева",cat:"крайние точки",topic:"Евразия",lat:66.08,lng:-169.65},
+{name:"мыс Гальинас",cat:"крайние точки",topic:"Южная Америка",lat:12.46,lng:-71.67},
+{name:"мыс Горн",cat:"крайние точки",topic:"Южная Америка",lat:-55.98,lng:-67.27},
+{name:"мыс Кабу-Бранку",cat:"крайние точки",topic:"Южная Америка",lat:-7.15,lng:-34.79},
+{name:"мыс Париньяс",cat:"крайние точки",topic:"Южная Америка",lat:-4.68,lng:-81.33},
+{name:"мыс Мёрчисон",cat:"крайние точки",topic:"Северная Америка",lat:71.95,lng:-94.97},
+{name:"мыс Марьято",cat:"крайние точки",topic:"Северная Америка",lat:7.2,lng:-80.88},
+{name:"мыс Принца Уэльского",cat:"крайние точки",topic:"Северная Америка",lat:65.6,lng:-168.08},
+{name:"мыс Сент-Чарльз",cat:"крайние точки",topic:"Северная Америка",lat:52.22,lng:-55.64},
+{name:"мыс Сифре",cat:"крайние точки",topic:"Антарктида",lat:-63.4,lng:-57.0},
+{name:"вдп. Виктория",cat:"водопады",topic:"Африка",lat:-17.92,lng:25.86},
+{name:"вдп. Анхель",cat:"водопады",topic:"Южная Америка",lat:5.97,lng:-62.54},
+{name:"вдп. Игуасу",cat:"водопады",topic:"Южная Америка",lat:-25.69,lng:-54.44},
+{name:"Ниагарский вдп.",cat:"водопады",topic:"Северная Америка",lat:43.08,lng:-79.07},
+{name:"Алжир",cat:"столицы",topic:"Африка",lat:36.75,lng:3.06},
+{name:"Каир",cat:"столицы",topic:"Африка",lat:30.04,lng:31.24},
+{name:"Претория",cat:"столицы",topic:"Африка",lat:-25.75,lng:28.19},
+{name:"Аддис-Абеба",cat:"столицы",topic:"Африка",lat:9.02,lng:38.75},
+{name:"Антананариву",cat:"столицы",topic:"Африка",lat:-18.91,lng:47.52},
+{name:"Рабат",cat:"столицы",topic:"Африка",lat:34.02,lng:-6.84},
+{name:"Дакар",cat:"столицы",topic:"Африка",lat:14.72,lng:-17.47},
+{name:"Хартум",cat:"столицы",topic:"Африка",lat:15.59,lng:32.53},
+{name:"Киншаса",cat:"столицы",topic:"Африка",lat:-4.32,lng:15.31},
+{name:"Луанда",cat:"столицы",topic:"Африка",lat:-8.84,lng:13.23},
+{name:"Канберра",cat:"столицы",topic:"Австралия",lat:-35.28,lng:149.13},
+{name:"Веллингтон",cat:"столицы",topic:"Австралия",lat:-41.29,lng:174.78},
+{name:"Буэнос-Айрес",cat:"столицы",topic:"Южная Америка",lat:-34.6,lng:-58.38},
+{name:"Бразилиа",cat:"столицы",topic:"Южная Америка",lat:-15.79,lng:-47.88},
+{name:"Лима",cat:"столицы",topic:"Южная Америка",lat:-12.05,lng:-77.04},
+{name:"Богота",cat:"столицы",topic:"Южная Америка",lat:4.71,lng:-74.07},
+{name:"Сантьяго",cat:"столицы",topic:"Южная Америка",lat:-33.45,lng:-70.67},
+{name:"Каракас",cat:"столицы",topic:"Южная Америка",lat:10.5,lng:-66.9},
+{name:"Кито",cat:"столицы",topic:"Южная Америка",lat:-0.18,lng:-78.47},
+{name:"Монтевидео",cat:"столицы",topic:"Южная Америка",lat:-34.88,lng:-56.17},
+{name:"Вашингтон",cat:"столицы",topic:"Северная Америка",lat:38.9,lng:-77.04},
+{name:"Оттава",cat:"столицы",topic:"Северная Америка",lat:45.42,lng:-75.7},
+{name:"Мехико",cat:"столицы",topic:"Северная Америка",lat:19.43,lng:-99.13},
+{name:"Гавана",cat:"столицы",topic:"Северная Америка",lat:23.11,lng:-82.37},
+{name:"Панама",cat:"столицы",topic:"Северная Америка",lat:8.98,lng:-79.52},
+{name:"Москва",cat:"столицы",topic:"Евразия",lat:55.76,lng:37.62},
+{name:"Лондон",cat:"столицы",topic:"Евразия",lat:51.51,lng:-0.13},
+{name:"Париж",cat:"столицы",topic:"Евразия",lat:48.86,lng:2.35},
+{name:"Берлин",cat:"столицы",topic:"Евразия",lat:52.52,lng:13.41},
+{name:"Пекин",cat:"столицы",topic:"Евразия",lat:39.9,lng:116.4},
+{name:"Токио",cat:"столицы",topic:"Евразия",lat:35.68,lng:139.69},
+{name:"Дели",cat:"столицы",topic:"Евразия",lat:28.61,lng:77.21},
+{name:"Рим",cat:"столицы",topic:"Евразия",lat:41.9,lng:12.5},
+{name:"Джакарта",cat:"столицы",topic:"Евразия",lat:-6.21,lng:106.85},
+{name:"Астана",cat:"столицы",topic:"Евразия",lat:51.17,lng:71.43},
+{name:"Тегеран",cat:"столицы",topic:"Евразия",lat:35.7,lng:51.42},
+{name:"Эр-Рияд",cat:"столицы",topic:"Евразия",lat:24.69,lng:46.72},
+{name:"Улан-Батор",cat:"столицы",topic:"Евразия",lat:47.92,lng:106.92},
+{name:"Исламабад",cat:"столицы",topic:"Евразия",lat:33.69,lng:73.04},
+{name:"Дакка",cat:"столицы",topic:"Евразия",lat:23.81,lng:90.41}
+];
+
+const CATEGORIES=[...new Set(GEO.map(g=>g.cat))];
+const CC={
+"равнины":"#16a34a","горы":"#92400e","вершины":"#b91c1c","вулканы":"#dc2626",
+"реки":"#2563eb","озёра":"#0891b2","моря":"#1d4ed8","острова":"#7c3aed",
+"полуострова":"#a855f7","проливы":"#0d9488","заливы":"#0284c7",
+"каналы":"#64748b","пустыни":"#d97706","крайние точки":"#e11d48",
+"водопады":"#06b6d4","столицы":"#ea580c"
+};
+const CL={
+"равнины":"Равнины","горы":"Горы","вершины":"Вершины","вулканы":"Вулканы",
+"реки":"Реки","озёра":"Озёра","моря":"Моря","острова":"Острова",
+"полуострова":"Полуострова","проливы":"Проливы","заливы":"Заливы",
+"каналы":"Каналы","пустыни":"Пустыни","крайние точки":"Крайние точки",
+"водопады":"Водопады","столицы":"Столицы"
+};
+
+let map,markers=[],selectedCats=new Set(CATEGORIES);
+let quizItems=[],qi=0,qScore=0,qMistakes=[],qAnswered=false;
+let currentUser=null;
+let sessionStart=null;
+
+function loadUser(){
+try{
+let s=localStorage.getItem('geo7_user');
+if(s)return JSON.parse(s);
+}catch(e){}
+return null;
+}
+function saveUser(u){
+try{localStorage.setItem('geo7_user',JSON.stringify(u))}catch(e){}
+}
+function clearUser(){
+try{localStorage.removeItem('geo7_user')}catch(e){}
+currentUser=null;
+}
+
+function showLogin(){
+document.getElementById('map').style.display='none';
+document.getElementById('ui').innerHTML='';
+document.getElementById('loginScreen').style.display='flex';
+let saved=loadUser();
+let form=document.getElementById('loginForm');
+let savedDiv=document.getElementById('savedUser');
+if(saved){
+form.style.display='none';
+savedDiv.style.display='block';
+savedDiv.innerHTML='<p>С возвращением!</p><div class="name">'+saved.surname+' '+saved.name+' ('+saved.cls+')</div>'+
+'<button class="login-btn" id="continueBtn" style="margin-top:12px">Продолжить</button>'+
+'<button id="changeBtn" style="margin-top:8px;width:100%;padding:10px;font-size:13px;border:1px solid #ddd;border-radius:8px;background:#fff;cursor:pointer">Сменить ученика</button>';
+document.getElementById('continueBtn').onclick=()=>{currentUser=saved;sessionStart=new Date();enterApp()};
+document.getElementById('changeBtn').onclick=()=>{clearUser();form.style.display='block';savedDiv.style.display='none'};
+}else{
+form.style.display='block';
+savedDiv.style.display='none';
+}
+let inputs=document.querySelectorAll('#loginForm input');
+let btn=document.getElementById('loginBtn');
+function checkFields(){
+let s=document.getElementById('inSurname').value.trim();
+let n=document.getElementById('inName').value.trim();
+let c=document.getElementById('inClass').value.trim();
+btn.disabled=!(s&&n&&c);
+}
+inputs.forEach(i=>i.addEventListener('input',checkFields));
+btn.onclick=()=>{
+let u={
+surname:document.getElementById('inSurname').value.trim(),
+name:document.getElementById('inName').value.trim(),
+cls:document.getElementById('inClass').value.trim()
+};
+saveUser(u);
+currentUser=u;
+sessionStart=new Date();
+enterApp();
+};
+}
+
+function enterApp(){
+document.getElementById('loginScreen').style.display='none';
+document.getElementById('map').style.display='block';
+if(!map)initMap();
+else map.invalidateSize();
+showMenu();
+}
+
+function initMap(){
+map=L.map('map',{center:[30,30],zoom:3,minZoom:2,maxZoom:10,worldCopyJump:true,zoomControl:false});
+L.control.zoom({position:'topright'}).addTo(map);
+L.tileLayer('https://tile.openstreetmap.de/{z}/{x}/{y}.png',{
+attribution:'&copy; <a href="https://openstreetmap.org">OpenStreetMap</a>',
+maxZoom:18
+}).addTo(map);
+}
+
+function mkPin(color,cls){
+return L.divIcon({className:'',html:'<div class="pin-default '+(cls||'')+'" style="background:'+color+'"></div>',iconSize:[18,18],iconAnchor:[9,9]});
+}
+function clearMap(){markers.forEach(m=>map.removeLayer(m));markers=[];}
+function shuffle(a){for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+
+function userBadgeHtml(){
+if(!currentUser)return '';
+let init=(currentUser.surname[0]||'')+(currentUser.name[0]||'');
+return '<div class="user-badge"><div class="avatar">'+init.toUpperCase()+'</div>'+
+currentUser.surname+' '+currentUser.name+' ('+currentUser.cls+')'+
+'<span class="logout" title="Сменить ученика" onclick="logout()">&#10005;</span></div>';
+}
+function logout(){
+if(confirm('Сменить ученика?')){clearUser();showLogin()}
+}
+
+function showMenu(){
+clearMap();
+let filtered=GEO.filter(g=>selectedCats.has(g.cat));
+filtered.forEach(g=>{
+let m=L.marker([g.lat,g.lng],{icon:mkPin(CC[g.cat]||'#2563eb')}).addTo(map);
+m.bindTooltip(g.name,{className:'tooltip-name',direction:'top',offset:[0,-10]});
+markers.push(m);
+});
+renderMenu();
+}
+
+function renderMenu(){
+const ui=document.getElementById('ui');
+let selAll=selectedCats.size===CATEGORIES.length;
+let catHtml=CATEGORIES.map(c=>{
+let cnt=GEO.filter(g=>g.cat===c).length;
+return '<button class="cat-btn '+(selectedCats.has(c)?'active':'')+'" data-cat="'+c+'"><span class="dot" style="background:'+(selectedCats.has(c)?'#fff':CC[c])+'"></span>'+(CL[c]||c)+' <span style="opacity:.6;font-size:11px">('+cnt+')</span></button>';
+}).join('');
+
+ui.innerHTML='<div class="panel">'+userBadgeHtml()+
+'<h1>Номенклатура 7 класс</h1>'+
+'<p class="sub">Выбери категории, затем режим</p>'+
+'<p class="section-label">Категории</p>'+
+'<div style="margin-bottom:8px"><button class="cat-btn" id="allBtn" style="font-weight:600">'+(selAll?'Снять все':'Выбрать все')+'</button></div>'+
+'<div class="cat-grid">'+catHtml+'</div>'+
+'<p class="section-label">Режим</p>'+
+'<div class="mode-row">'+
+'<div class="mode-card" id="mStudy"><div class="icon">&#128214;</div><div class="label">Изучение</div><div class="desc">Все объекты с подписями</div></div>'+
+'<div class="mode-card" id="mTest"><div class="icon">&#127919;</div><div class="label">Тест</div><div class="desc">Найди объект на карте</div></div>'+
+'</div></div>';
+
+ui.querySelectorAll('.cat-btn[data-cat]').forEach(b=>{
+b.onclick=()=>{let c=b.dataset.cat;if(selectedCats.has(c))selectedCats.delete(c);else selectedCats.add(c);showMenu()};
+});
+document.getElementById('allBtn').onclick=()=>{if(selAll)selectedCats.clear();else CATEGORIES.forEach(c=>selectedCats.add(c));showMenu()};
+document.getElementById('mStudy').onclick=()=>{if(selectedCats.size===0)return;startStudy()};
+document.getElementById('mTest').onclick=()=>{if(selectedCats.size===0)return;startQuiz()};
+}
+
+function buildLegend(items){
+let cats=[...new Set(items.map(g=>g.cat))];
+let h='<div class="legend"><p class="leg-title">Легенда</p>';
+cats.forEach(c=>{
+let n=items.filter(g=>g.cat===c).length;
+h+='<div class="leg-item"><div class="leg-dot" style="background:'+CC[c]+'"></div><span>'+(CL[c]||c)+'</span><span class="leg-count">'+n+'</span></div>';
+});
+h+='</div>';
+return h;
+}
+
+function startStudy(){
+clearMap();
+let items=GEO.filter(g=>selectedCats.has(g.cat));
+items.forEach(g=>{
+let m=L.marker([g.lat,g.lng],{icon:mkPin(CC[g.cat]||'#2563eb')}).addTo(map);
+m.bindTooltip(g.name,{className:'study-label',direction:'right',offset:[12,0],permanent:true});
+m.bindPopup('<strong>'+g.name+'</strong><br><span style="color:#888">'+(CL[g.cat]||g.cat)+' &middot; '+g.topic+'</span>');
+markers.push(m);
+});
+if(items.length>0){
+let bounds=L.latLngBounds(items.map(g=>[g.lat,g.lng]));
+map.fitBounds(bounds,{padding:[60,60],maxZoom:5});
+}
+sendToSheet({action:'study',categories:[...selectedCats].map(c=>CL[c]||c).join(', '),count:items.length});
+const ui=document.getElementById('ui');
+ui.innerHTML='<div class="top-bar"><div class="top-bar-row">'+
+'<button class="home-btn" id="homeBtn" title="На главную">&#8592;</button>'+
+'<div class="info"><div class="title">Режим изучения</div>'+
+'<div class="subtitle">'+items.length+' объектов. Нажми на булавку для подробностей.</div></div>'+
+'</div></div>'+buildLegend(items);
+document.getElementById('homeBtn').onclick=showMenu;
+}
+
+function startQuiz(){
+let pool=GEO.filter(g=>selectedCats.has(g.cat));
+if(pool.length<4){alert('Выбери больше категорий (минимум 4 объекта)');return}
+quizItems=shuffle([...pool]).slice(0,Math.min(20,pool.length));
+qi=0;qScore=0;qMistakes=[];qAnswered=false;
+showQ();
+}
+
+function showQ(){
+clearMap();
+let q=quizItems[qi];
+let pool=GEO.filter(g=>selectedCats.has(g.cat));
+let others=shuffle(pool.filter(g=>g.name!==q.name));
+let shown=shuffle([q,...others.slice(0,Math.min(7,others.length))]);
+qAnswered=false;
+shown.forEach(g=>{
+let m=L.marker([g.lat,g.lng],{icon:mkPin(CC[g.cat]||'#2563eb')}).addTo(map);
+m._geo=g;
+m.on('click',()=>clickPin(m,g));
+markers.push(m);
+});
+let bounds=L.latLngBounds(shown.map(g=>[g.lat,g.lng]));
+map.fitBounds(bounds,{padding:[80,80],maxZoom:6});
+renderQ(q);
+}
+
+function renderQ(q){
+let pct=Math.round((qi/quizItems.length)*100);
+const ui=document.getElementById('ui');
+ui.innerHTML='<div class="top-bar"><div class="top-bar-row">'+
+'<button class="home-btn" id="homeBtn" title="Завершить">&#8592;</button>'+
+'<div class="info"><div class="q-text">Найди: '+q.name+'</div>'+
+'<div class="q-hint">'+(CL[q.cat]||q.cat)+' &middot; '+q.topic+'&nbsp;&nbsp;|&nbsp;&nbsp;'+(qi+1)+'/'+quizItems.length+'&nbsp;&nbsp;|&nbsp;&nbsp;'+qScore+' верно</div></div>'+
+'</div>'+
+'<div class="q-bar"><div class="q-fill" style="width:'+pct+'%"></div></div>'+
+'<div id="qfb"></div><div id="qnx"></div></div>';
+document.getElementById('homeBtn').onclick=()=>{if(confirm('Завершить тест и вернуться в меню?'))showMenu()};
+}
+
+function clickPin(marker,g){
+if(qAnswered)return;
+let q=quizItems[qi];
+let fb=document.getElementById('qfb');
+let nx=document.getElementById('qnx');
+qAnswered=true;
+if(g.name===q.name){
+qScore++;
+marker.setIcon(mkPin('#16a34a','pin-correct'));
+marker.bindTooltip(g.name,{className:'tooltip-name',direction:'top',offset:[0,-10],permanent:true}).openTooltip();
+markers.forEach(m=>{if(m!==marker)m.setIcon(mkPin('#999','pin-dim'))});
+fb.className='q-feedback ok';fb.textContent='Верно!';fb.style.display='block';
+}else{
+marker.setIcon(mkPin('#dc2626','pin-wrong'));
+marker.bindTooltip(g.name,{className:'tooltip-name',direction:'top',offset:[0,-10],permanent:true}).openTooltip();
+let cm=markers.find(m=>m._geo&&m._geo.name===q.name);
+if(cm){cm.setIcon(mkPin('#f59e0b','pin-target'));cm.bindTooltip(q.name,{className:'tooltip-name',direction:'top',offset:[0,-10],permanent:true}).openTooltip()}
+markers.forEach(m=>{if(m!==marker&&m!==cm)m.setIcon(mkPin('#999','pin-dim'))});
+fb.className='q-feedback fail';fb.innerHTML='Неверно! Это <strong>'+g.name+'</strong>. Правильный ответ выделен жёлтым.';fb.style.display='block';
+qMistakes.push({asked:q.name,clicked:g.name});
+}
+let last=qi>=quizItems.length-1;
+nx.innerHTML='<button class="q-next" id="nxBtn">'+(last?'Результаты':'Далее')+'</button>';
+document.getElementById('nxBtn').onclick=()=>{qi++;if(qi<quizItems.length)showQ();else showResults()};
+}
+
+function showResults(){
+clearMap();
+let pct=Math.round((qScore/quizItems.length)*100);
+let msg='';
+if(pct>=90)msg='Отличный результат! Ты прекрасно знаешь карту!';
+else if(pct>=70)msg='Хороший результат! Осталось подтянуть некоторые объекты.';
+else if(pct>=50)msg='Неплохо, но стоит ещё потренироваться.';
+else msg='Нужно поработать ещё. Попробуй сначала режим изучения!';
+let mh='';
+if(qMistakes.length){
+mh='<div class="mistakes-box"><p style="font-weight:600;margin-bottom:8px;font-size:13px">Ошибки:</p>';
+qMistakes.forEach(m=>{mh+='<div class="mi">Искал: <strong>'+m.asked+'</strong> — нажал: <span>'+m.clicked+'</span></div>'});
+mh+='</div>';
+}
+let errList=qMistakes.map(m=>m.asked+'->'+m.clicked).join('; ');
+sendToSheet({
+action:'test',
+total:quizItems.length,
+correct:qScore,
+percent:pct,
+categories:[...selectedCats].map(c=>CL[c]||c).join(', '),
+errors:errList||'нет'
+});
+const ui=document.getElementById('ui');
+ui.innerHTML='<div class="score-panel">'+
+'<div class="big">'+pct+'%</div>'+
+'<div class="lbl">'+qScore+' из '+quizItems.length+' правильно</div>'+
+'<div class="msg">'+msg+'</div>'+mh+
+'<p class="sending-note" id="sendNote"></p>'+
+'<div style="margin-top:16px">'+
+'<button class="primary" id="retryBtn">Ещё раз</button>'+
+'<button id="studyBtn">Изучение</button>'+
+'<button id="homeBtn2">В меню</button>'+
+'</div></div>';
+document.getElementById('retryBtn').onclick=startQuiz;
+document.getElementById('studyBtn').onclick=startStudy;
+document.getElementById('homeBtn2').onclick=showMenu;
+}
+
+function sendToSheet(data){
+if(!SCRIPT_URL){console.log('SCRIPT_URL не задан, статистика не отправляется',data);return}
+if(!currentUser)return;
+let now=new Date();
+let payload={
+timestamp:now.toLocaleString('ru-RU'),
+surname:currentUser.surname,
+name:currentUser.name,
+cls:currentUser.cls,
+action:data.action,
+categories:data.categories||'',
+count:data.count||'',
+total:data.total||'',
+correct:data.correct||'',
+percent:data.percent||'',
+errors:data.errors||''
+};
+fetch(SCRIPT_URL,{
+method:'POST',
+mode:'no-cors',
+headers:{'Content-Type':'application/json'},
+body:JSON.stringify(payload)
+}).then(()=>{
+let el=document.getElementById('sendNote');
+if(el)el.textContent='Результат отправлен учителю';
+}).catch(e=>{
+console.warn('Ошибка отправки:',e);
+let el=document.getElementById('sendNote');
+if(el)el.textContent='Не удалось отправить (нет интернета?)';
+});
+}
+
+showLogin();
+</script>
+</body>
+</html>
