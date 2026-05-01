@@ -402,9 +402,9 @@ let currentTileLayer=null;
 let currentMapStyle='standard_ru';
 const MAP_STYLES={
 standard_ru:{name:'Стандартная',icon:'&#127758;',url:'https://mt{s}.google.com/vt/lyrs=m&hl=ru&x={x}&y={y}&z={z}',opts:{subdomains:'0123',maxZoom:18,attribution:'&copy; Google'}},
-terrain:{name:'С рельефом',icon:'&#9968;',url:'https://mt{s}.google.com/vt/lyrs=p&hl=ru&x={x}&y={y}&z={z}',opts:{subdomains:'0123',maxZoom:18,attribution:'&copy; Google'}},
-terrain_only:{name:'Рельеф (без подписей)',icon:'&#127956;',url:'https://mt{s}.google.com/vt/lyrs=t&hl=ru&x={x}&y={y}&z={z}',opts:{subdomains:'0123',maxZoom:18,attribution:'&copy; Google'}},
-satellite:{name:'Спутник',icon:'&#128752;',url:'https://mt{s}.google.com/vt/lyrs=s&hl=ru&x={x}&y={y}&z={z}',opts:{subdomains:'0123',maxZoom:18,attribution:'&copy; Google'}}
+terrain:{name:'С рельефом',icon:'&#9968;',url:'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',opts:{maxZoom:17,attribution:'&copy; OpenTopoMap'}},
+terrain_only:{name:'Без подписей',icon:'&#127956;',url:'https://server.arcgisonline.com/ArcGIS/rest/services/World_Physical_Map/MapServer/tile/{z}/{y}/{x}',opts:{maxZoom:8,attribution:'&copy; Esri'}},
+satellite:{name:'Спутник',icon:'&#128752;',url:'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',opts:{maxZoom:18,attribution:'&copy; Esri'}}
 };
 
 function loadUser(){try{let s=localStorage.getItem('geo7_user');if(s)return JSON.parse(s)}catch(e){}return null}
