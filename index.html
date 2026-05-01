@@ -10,7 +10,6 @@
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f5f5f0;color:#1a1a1a}
 #map{width:100%;height:100vh;display:none}
-
 .login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,#e0e7ff 0%,#f0fdf4 100%);padding:20px}
 .login-card{background:#fff;border-radius:18px;box-shadow:0 8px 40px rgba(0,0,0,.1);padding:40px;max-width:400px;width:100%;text-align:center}
 .login-card h1{font-size:22px;font-weight:700;margin-bottom:4px}
@@ -26,8 +25,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .login-saved{margin-top:16px;padding:12px;background:#f8fafc;border-radius:10px;border:1px solid #e2e8f0}
 .login-saved p{font-size:13px;color:#64748b;margin-bottom:6px}
 .login-saved .name{font-weight:600;color:#1a1a1a;font-size:15px}
-.login-saved button{margin-top:8px;padding:6px 14px;font-size:12px;border:1px solid #ddd;border-radius:6px;background:#fff;cursor:pointer}
-
 .panel{position:absolute;top:12px;left:60px;z-index:1000;background:#fff;border-radius:14px;box-shadow:0 4px 24px rgba(0,0,0,.12);padding:20px;max-width:400px;width:calc(100% - 80px);max-height:calc(100vh - 24px);overflow-y:auto}
 .panel h1{font-size:18px;font-weight:600;margin-bottom:4px}
 .panel .sub{font-size:13px;color:#666;margin-bottom:16px}
@@ -35,26 +32,18 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .user-badge .avatar{width:20px;height:20px;border-radius:50%;background:#16a34a;color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700}
 .user-badge .logout{margin-left:4px;cursor:pointer;opacity:.5;font-size:14px}
 .user-badge .logout:hover{opacity:1}
-
 .section-label{font-size:12px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
 .cat-grid{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
 .cat-btn{padding:6px 12px;font-size:12px;border:1px solid #ddd;border-radius:20px;background:#fff;cursor:pointer;transition:.15s;white-space:nowrap}
 .cat-btn:hover{background:#f0f0f0}
 .cat-btn.active{background:#2563eb;color:#fff;border-color:#2563eb}
 .cat-btn .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px;vertical-align:middle}
-
 .mode-row{display:flex;gap:8px;margin-bottom:16px}
 .mode-card{flex:1;padding:14px;border:2px solid #eee;border-radius:12px;cursor:pointer;text-align:center;transition:.15s}
 .mode-card:hover{border-color:#bbb}
-.mode-card.active{border-color:#2563eb;background:#eff6ff}
 .mode-card .icon{font-size:24px;margin-bottom:4px}
 .mode-card .label{font-size:14px;font-weight:600}
 .mode-card .desc{font-size:11px;color:#888;margin-top:2px}
-
-.start-btn{width:100%;padding:12px;font-size:15px;font-weight:600;border:none;border-radius:10px;background:#2563eb;color:#fff;cursor:pointer;transition:.15s}
-.start-btn:hover{background:#1d4ed8}
-.start-btn:disabled{background:#ccc;cursor:default}
-
 .top-bar{position:absolute;top:12px;left:60px;z-index:1000;background:#fff;border-radius:14px;box-shadow:0 4px 24px rgba(0,0,0,.12);padding:16px 20px;max-width:420px;width:calc(100% - 80px)}
 .top-bar-row{display:flex;align-items:center;gap:12px}
 .top-bar .home-btn{width:36px;height:36px;border-radius:8px;border:1px solid #ddd;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;transition:.15s}
@@ -62,7 +51,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .top-bar .info{flex:1;min-width:0}
 .top-bar .title{font-size:15px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .top-bar .subtitle{font-size:12px;color:#888}
-
 .q-bar{height:3px;background:#eee;border-radius:2px;margin-top:10px;overflow:hidden}
 .q-fill{height:100%;background:#2563eb;transition:width .3s}
 .q-text{font-size:17px;font-weight:600;margin-top:12px;line-height:1.4}
@@ -72,7 +60,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .q-feedback.fail{display:block;background:#fef2f2;color:#991b1b;border:1px solid #fecaca}
 .q-next{margin-top:8px;padding:10px 20px;font-size:14px;font-weight:500;border:1px solid #ddd;border-radius:8px;background:#fff;cursor:pointer}
 .q-next:hover{background:#f5f5f5}
-
 .score-panel{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:1000;background:#fff;border-radius:18px;box-shadow:0 8px 40px rgba(0,0,0,.18);padding:32px 40px;text-align:center;min-width:320px;max-width:420px}
 .score-panel .big{font-size:48px;font-weight:700;color:#2563eb;margin-bottom:4px}
 .score-panel .lbl{font-size:14px;color:#888;margin-bottom:16px}
@@ -83,7 +70,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .mistakes-box .mi{padding:6px 0;border-bottom:1px solid #f0f0f0;font-size:13px}
 .mistakes-box .mi span{color:#dc2626}
 .sending-note{font-size:12px;color:#888;margin-top:8px}
-
 .pin-default{border:3px solid #fff;border-radius:50%;width:18px;height:18px;box-shadow:0 2px 6px rgba(0,0,0,.3);cursor:pointer;transition:transform .15s}
 .pin-default:hover{transform:scale(1.3)}
 .pin-correct{background:#16a34a !important;border-color:#fff !important;animation:popIn .3s}
@@ -93,14 +79,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 @keyframes popIn{0%{transform:scale(0.5)}50%{transform:scale(1.3)}100%{transform:scale(1)}}
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
 @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.2)}}
-
 .leaflet-popup-content{font-family:inherit;font-size:13px;margin:8px 12px}
-.leaflet-popup-content strong{font-weight:600}
 .tooltip-name{background:#1a1a1a;color:#fff;border:none;border-radius:6px;padding:4px 10px;font-size:12px;font-weight:500;box-shadow:0 2px 8px rgba(0,0,0,.2)}
 .tooltip-name::before{border-top-color:#1a1a1a !important}
 .study-label{background:rgba(255,255,255,0.92);color:#1a1a1a;border:1px solid rgba(0,0,0,0.15);border-radius:4px;padding:2px 7px;font-size:11px;font-weight:600;box-shadow:0 1px 4px rgba(0,0,0,.1);white-space:nowrap}
 .study-label::before{display:none !important}
-
 .legend{position:absolute;bottom:24px;right:12px;z-index:1000;background:#fff;border-radius:10px;box-shadow:0 2px 12px rgba(0,0,0,.1);padding:12px 14px;font-size:12px;max-height:calc(100vh - 100px);overflow-y:auto}
 .legend .leg-title{font-weight:600;margin-bottom:6px;font-size:13px}
 .legend .leg-item{display:flex;align-items:center;gap:6px;padding:2px 0}
@@ -109,39 +92,24 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 </style>
 </head>
 <body>
-
 <div id="loginScreen" class="login-screen">
 <div class="login-card">
 <div class="emoji-top">&#127758;</div>
 <h1>Географическая номенклатура</h1>
 <p class="sub">Тренажёр для 7 класса</p>
 <div id="loginForm">
-<div class="field">
-<label>Фамилия</label>
-<input type="text" id="inSurname" placeholder="Иванов" autocomplete="off">
-</div>
-<div class="field">
-<label>Имя</label>
-<input type="text" id="inName" placeholder="Александр" autocomplete="off">
-</div>
-<div class="field">
-<label>Класс</label>
-<input type="text" id="inClass" placeholder="7-А" autocomplete="off">
-</div>
+<div class="field"><label>Фамилия</label><input type="text" id="inSurname" placeholder="Иванов" autocomplete="off"></div>
+<div class="field"><label>Имя</label><input type="text" id="inName" placeholder="Александр" autocomplete="off"></div>
+<div class="field"><label>Класс</label><input type="text" id="inClass" placeholder="7-А" autocomplete="off"></div>
 <button class="login-btn" id="loginBtn" disabled>Войти</button>
 </div>
 <div id="savedUser" class="login-saved" style="display:none"></div>
 </div>
 </div>
-
 <div id="map"></div>
 <div id="ui"></div>
-
 <script>
-// ========== НАСТРОЙКА ==========
-// Вставьте URL вашего Google Apps Script (веб-приложения) ниже:
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxOisiXQ77pYkmQC9xGNFdiSY5khWLnNjuqOMHxJ7r0gYzBALQd4pnoos3kRpnDZjsS/exec';
-// ================================
 
 const GEO = [
 {name:"Амазонская низменность",cat:"равнины",topic:"Литосфера",lat:-3.0,lng:-60.0},
@@ -419,40 +387,16 @@ const GEO = [
 ];
 
 const CATEGORIES=[...new Set(GEO.map(g=>g.cat))];
-const CC={
-"равнины":"#16a34a","горы":"#92400e","вершины":"#b91c1c","вулканы":"#dc2626",
-"реки":"#2563eb","озёра":"#0891b2","моря":"#1d4ed8","острова":"#7c3aed",
-"полуострова":"#a855f7","проливы":"#0d9488","заливы":"#0284c7",
-"каналы":"#64748b","пустыни":"#d97706","крайние точки":"#e11d48",
-"водопады":"#06b6d4","столицы":"#ea580c"
-};
-const CL={
-"равнины":"Равнины","горы":"Горы","вершины":"Вершины","вулканы":"Вулканы",
-"реки":"Реки","озёра":"Озёра","моря":"Моря","острова":"Острова",
-"полуострова":"Полуострова","проливы":"Проливы","заливы":"Заливы",
-"каналы":"Каналы","пустыни":"Пустыни","крайние точки":"Крайние точки",
-"водопады":"Водопады","столицы":"Столицы"
-};
+const CC={"равнины":"#16a34a","горы":"#92400e","вершины":"#b91c1c","вулканы":"#dc2626","реки":"#2563eb","озёра":"#0891b2","моря":"#1d4ed8","острова":"#7c3aed","полуострова":"#a855f7","проливы":"#0d9488","заливы":"#0284c7","каналы":"#64748b","пустыни":"#d97706","крайние точки":"#e11d48","водопады":"#06b6d4","столицы":"#ea580c"};
+const CL={"равнины":"Равнины","горы":"Горы","вершины":"Вершины","вулканы":"Вулканы","реки":"Реки","озёра":"Озёра","моря":"Моря","острова":"Острова","полуострова":"Полуострова","проливы":"Проливы","заливы":"Заливы","каналы":"Каналы","пустыни":"Пустыни","крайние точки":"Крайние точки","водопады":"Водопады","столицы":"Столицы"};
 
 let map,markers=[],selectedCats=new Set(CATEGORIES);
 let quizItems=[],qi=0,qScore=0,qMistakes=[],qAnswered=false;
-let currentUser=null;
-let sessionStart=null;
+let currentUser=null,sessionStart=null;
 
-function loadUser(){
-try{
-let s=localStorage.getItem('geo7_user');
-if(s)return JSON.parse(s);
-}catch(e){}
-return null;
-}
-function saveUser(u){
-try{localStorage.setItem('geo7_user',JSON.stringify(u))}catch(e){}
-}
-function clearUser(){
-try{localStorage.removeItem('geo7_user')}catch(e){}
-currentUser=null;
-}
+function loadUser(){try{let s=localStorage.getItem('geo7_user');if(s)return JSON.parse(s)}catch(e){}return null}
+function saveUser(u){try{localStorage.setItem('geo7_user',JSON.stringify(u))}catch(e){}}
+function clearUser(){try{localStorage.removeItem('geo7_user')}catch(e){}currentUser=null}
 
 function showLogin(){
 document.getElementById('map').style.display='none';
@@ -462,143 +406,68 @@ let saved=loadUser();
 let form=document.getElementById('loginForm');
 let savedDiv=document.getElementById('savedUser');
 if(saved){
-form.style.display='none';
-savedDiv.style.display='block';
+form.style.display='none';savedDiv.style.display='block';
 savedDiv.innerHTML='<p>С возвращением!</p><div class="name">'+saved.surname+' '+saved.name+' ('+saved.cls+')</div>'+
 '<button class="login-btn" id="continueBtn" style="margin-top:12px">Продолжить</button>'+
 '<button id="changeBtn" style="margin-top:8px;width:100%;padding:10px;font-size:13px;border:1px solid #ddd;border-radius:8px;background:#fff;cursor:pointer">Сменить ученика</button>';
 document.getElementById('continueBtn').onclick=()=>{currentUser=saved;sessionStart=new Date();enterApp()};
 document.getElementById('changeBtn').onclick=()=>{clearUser();form.style.display='block';savedDiv.style.display='none'};
-}else{
-form.style.display='block';
-savedDiv.style.display='none';
-}
+}else{form.style.display='block';savedDiv.style.display='none'}
 let inputs=document.querySelectorAll('#loginForm input');
 let btn=document.getElementById('loginBtn');
-function checkFields(){
-let s=document.getElementById('inSurname').value.trim();
-let n=document.getElementById('inName').value.trim();
-let c=document.getElementById('inClass').value.trim();
-btn.disabled=!(s&&n&&c);
-}
-inputs.forEach(i=>i.addEventListener('input',checkFields));
-btn.onclick=()=>{
-let u={
-surname:document.getElementById('inSurname').value.trim(),
-name:document.getElementById('inName').value.trim(),
-cls:document.getElementById('inClass').value.trim()
-};
-saveUser(u);
-currentUser=u;
-sessionStart=new Date();
-enterApp();
-};
+function ck(){btn.disabled=!(document.getElementById('inSurname').value.trim()&&document.getElementById('inName').value.trim()&&document.getElementById('inClass').value.trim())}
+inputs.forEach(i=>i.addEventListener('input',ck));
+btn.onclick=()=>{let u={surname:document.getElementById('inSurname').value.trim(),name:document.getElementById('inName').value.trim(),cls:document.getElementById('inClass').value.trim()};saveUser(u);currentUser=u;sessionStart=new Date();enterApp()};
 }
 
 function enterApp(){
 document.getElementById('loginScreen').style.display='none';
 document.getElementById('map').style.display='block';
-if(!map)initMap();
-else map.invalidateSize();
+if(!map)initMap();else map.invalidateSize();
 showMenu();
 }
 
 function initMap(){
 map=L.map('map',{center:[30,30],zoom:3,minZoom:2,maxZoom:10,worldCopyJump:true,zoomControl:false});
 L.control.zoom({position:'topright'}).addTo(map);
-L.tileLayer('https://tile.openstreetmap.de/{z}/{x}/{y}.png',{
-attribution:'&copy; <a href="https://openstreetmap.org">OpenStreetMap</a>',
-maxZoom:18
+L.tileLayer('https://mt{s}.google.com/vt/lyrs=m&hl=ru&x={x}&y={y}&z={z}',{
+subdomains:'0123',maxZoom:18,attribution:'&copy; Google'
 }).addTo(map);
 }
 
-function mkPin(color,cls){
-return L.divIcon({className:'',html:'<div class="pin-default '+(cls||'')+'" style="background:'+color+'"></div>',iconSize:[18,18],iconAnchor:[9,9]});
-}
-function clearMap(){markers.forEach(m=>map.removeLayer(m));markers=[];}
+function mkPin(color,cls){return L.divIcon({className:'',html:'<div class="pin-default '+(cls||'')+'" style="background:'+color+'"></div>',iconSize:[18,18],iconAnchor:[9,9]})}
+function clearMap(){markers.forEach(m=>map.removeLayer(m));markers=[]}
 function shuffle(a){for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
-
-function userBadgeHtml(){
-if(!currentUser)return '';
-let init=(currentUser.surname[0]||'')+(currentUser.name[0]||'');
-return '<div class="user-badge"><div class="avatar">'+init.toUpperCase()+'</div>'+
-currentUser.surname+' '+currentUser.name+' ('+currentUser.cls+')'+
-'<span class="logout" title="Сменить ученика" onclick="logout()">&#10005;</span></div>';
-}
-function logout(){
-if(confirm('Сменить ученика?')){clearUser();showLogin()}
-}
+function userBadgeHtml(){if(!currentUser)return '';let init=(currentUser.surname[0]||'')+(currentUser.name[0]||'');return '<div class="user-badge"><div class="avatar">'+init.toUpperCase()+'</div>'+currentUser.surname+' '+currentUser.name+' ('+currentUser.cls+')'+'<span class="logout" title="Сменить ученика" onclick="logout()">&#10005;</span></div>'}
+function logout(){if(confirm('Сменить ученика?')){clearUser();showLogin()}}
 
 function showMenu(){
 clearMap();
-let filtered=GEO.filter(g=>selectedCats.has(g.cat));
-filtered.forEach(g=>{
-let m=L.marker([g.lat,g.lng],{icon:mkPin(CC[g.cat]||'#2563eb')}).addTo(map);
-m.bindTooltip(g.name,{className:'tooltip-name',direction:'top',offset:[0,-10]});
-markers.push(m);
-});
+GEO.filter(g=>selectedCats.has(g.cat)).forEach(g=>{let m=L.marker([g.lat,g.lng],{icon:mkPin(CC[g.cat]||'#2563eb')}).addTo(map);m.bindTooltip(g.name,{className:'tooltip-name',direction:'top',offset:[0,-10]});markers.push(m)});
 renderMenu();
 }
 
 function renderMenu(){
 const ui=document.getElementById('ui');
 let selAll=selectedCats.size===CATEGORIES.length;
-let catHtml=CATEGORIES.map(c=>{
-let cnt=GEO.filter(g=>g.cat===c).length;
-return '<button class="cat-btn '+(selectedCats.has(c)?'active':'')+'" data-cat="'+c+'"><span class="dot" style="background:'+(selectedCats.has(c)?'#fff':CC[c])+'"></span>'+(CL[c]||c)+' <span style="opacity:.6;font-size:11px">('+cnt+')</span></button>';
-}).join('');
-
-ui.innerHTML='<div class="panel">'+userBadgeHtml()+
-'<h1>Номенклатура 7 класс</h1>'+
-'<p class="sub">Выбери категории, затем режим</p>'+
-'<p class="section-label">Категории</p>'+
-'<div style="margin-bottom:8px"><button class="cat-btn" id="allBtn" style="font-weight:600">'+(selAll?'Снять все':'Выбрать все')+'</button></div>'+
-'<div class="cat-grid">'+catHtml+'</div>'+
-'<p class="section-label">Режим</p>'+
-'<div class="mode-row">'+
-'<div class="mode-card" id="mStudy"><div class="icon">&#128214;</div><div class="label">Изучение</div><div class="desc">Все объекты с подписями</div></div>'+
-'<div class="mode-card" id="mTest"><div class="icon">&#127919;</div><div class="label">Тест</div><div class="desc">Найди объект на карте</div></div>'+
-'</div></div>';
-
-ui.querySelectorAll('.cat-btn[data-cat]').forEach(b=>{
-b.onclick=()=>{let c=b.dataset.cat;if(selectedCats.has(c))selectedCats.delete(c);else selectedCats.add(c);showMenu()};
-});
+let catHtml=CATEGORIES.map(c=>{let cnt=GEO.filter(g=>g.cat===c).length;return '<button class="cat-btn '+(selectedCats.has(c)?'active':'')+'" data-cat="'+c+'"><span class="dot" style="background:'+(selectedCats.has(c)?'#fff':CC[c])+'"></span>'+(CL[c]||c)+' <span style="opacity:.6;font-size:11px">('+cnt+')</span></button>'}).join('');
+ui.innerHTML='<div class="panel">'+userBadgeHtml()+'<h1>Номенклатура 7 класс</h1><p class="sub">Выбери категории, затем режим</p><p class="section-label">Категории</p><div style="margin-bottom:8px"><button class="cat-btn" id="allBtn" style="font-weight:600">'+(selAll?'Снять все':'Выбрать все')+'</button></div><div class="cat-grid">'+catHtml+'</div><p class="section-label">Режим</p><div class="mode-row"><div class="mode-card" id="mStudy"><div class="icon">&#128214;</div><div class="label">Изучение</div><div class="desc">Все объекты с подписями</div></div><div class="mode-card" id="mTest"><div class="icon">&#127919;</div><div class="label">Тест</div><div class="desc">Найди объект на карте</div></div></div></div>';
+ui.querySelectorAll('.cat-btn[data-cat]').forEach(b=>{b.onclick=()=>{let c=b.dataset.cat;if(selectedCats.has(c))selectedCats.delete(c);else selectedCats.add(c);showMenu()}});
 document.getElementById('allBtn').onclick=()=>{if(selAll)selectedCats.clear();else CATEGORIES.forEach(c=>selectedCats.add(c));showMenu()};
 document.getElementById('mStudy').onclick=()=>{if(selectedCats.size===0)return;startStudy()};
 document.getElementById('mTest').onclick=()=>{if(selectedCats.size===0)return;startQuiz()};
 }
 
-function buildLegend(items){
-let cats=[...new Set(items.map(g=>g.cat))];
-let h='<div class="legend"><p class="leg-title">Легенда</p>';
-cats.forEach(c=>{
-let n=items.filter(g=>g.cat===c).length;
-h+='<div class="leg-item"><div class="leg-dot" style="background:'+CC[c]+'"></div><span>'+(CL[c]||c)+'</span><span class="leg-count">'+n+'</span></div>';
-});
-h+='</div>';
-return h;
-}
+function buildLegend(items){let cats=[...new Set(items.map(g=>g.cat))];let h='<div class="legend"><p class="leg-title">Легенда</p>';cats.forEach(c=>{let n=items.filter(g=>g.cat===c).length;h+='<div class="leg-item"><div class="leg-dot" style="background:'+CC[c]+'"></div><span>'+(CL[c]||c)+'</span><span class="leg-count">'+n+'</span></div>'});return h+'</div>'}
 
 function startStudy(){
 clearMap();
 let items=GEO.filter(g=>selectedCats.has(g.cat));
-items.forEach(g=>{
-let m=L.marker([g.lat,g.lng],{icon:mkPin(CC[g.cat]||'#2563eb')}).addTo(map);
-m.bindTooltip(g.name,{className:'study-label',direction:'right',offset:[12,0],permanent:true});
-m.bindPopup('<strong>'+g.name+'</strong><br><span style="color:#888">'+(CL[g.cat]||g.cat)+' &middot; '+g.topic+'</span>');
-markers.push(m);
-});
-if(items.length>0){
-let bounds=L.latLngBounds(items.map(g=>[g.lat,g.lng]));
-map.fitBounds(bounds,{padding:[60,60],maxZoom:5});
-}
+items.forEach(g=>{let m=L.marker([g.lat,g.lng],{icon:mkPin(CC[g.cat]||'#2563eb')}).addTo(map);m.bindTooltip(g.name,{className:'study-label',direction:'right',offset:[12,0],permanent:true});m.bindPopup('<strong>'+g.name+'</strong><br><span style="color:#888">'+(CL[g.cat]||g.cat)+' &middot; '+g.topic+'</span>');markers.push(m)});
+if(items.length>0){map.fitBounds(L.latLngBounds(items.map(g=>[g.lat,g.lng])),{padding:[60,60],maxZoom:5})}
 sendToSheet({action:'study',categories:[...selectedCats].map(c=>CL[c]||c).join(', '),count:items.length});
 const ui=document.getElementById('ui');
-ui.innerHTML='<div class="top-bar"><div class="top-bar-row">'+
-'<button class="home-btn" id="homeBtn" title="На главную">&#8592;</button>'+
-'<div class="info"><div class="title">Режим изучения</div>'+
-'<div class="subtitle">'+items.length+' объектов. Нажми на булавку для подробностей.</div></div>'+
-'</div></div>'+buildLegend(items);
+ui.innerHTML='<div class="top-bar"><div class="top-bar-row"><button class="home-btn" id="homeBtn" title="На главную">&#8592;</button><div class="info"><div class="title">Режим изучения</div><div class="subtitle">'+items.length+' объектов. Нажми на булавку для подробностей.</div></div></div></div>'+buildLegend(items);
 document.getElementById('homeBtn').onclick=showMenu;
 }
 
@@ -611,51 +480,29 @@ showQ();
 }
 
 function showQ(){
-clearMap();
-let q=quizItems[qi];
+clearMap();let q=quizItems[qi];
 let pool=GEO.filter(g=>selectedCats.has(g.cat));
 let others=shuffle(pool.filter(g=>g.name!==q.name));
 let shown=shuffle([q,...others.slice(0,Math.min(7,others.length))]);
 qAnswered=false;
-shown.forEach(g=>{
-let m=L.marker([g.lat,g.lng],{icon:mkPin(CC[g.cat]||'#2563eb')}).addTo(map);
-m._geo=g;
-m.on('click',()=>clickPin(m,g));
-markers.push(m);
-});
-let bounds=L.latLngBounds(shown.map(g=>[g.lat,g.lng]));
-map.fitBounds(bounds,{padding:[80,80],maxZoom:6});
+shown.forEach(g=>{let m=L.marker([g.lat,g.lng],{icon:mkPin(CC[g.cat]||'#2563eb')}).addTo(map);m._geo=g;m.on('click',()=>clickPin(m,g));markers.push(m)});
+map.fitBounds(L.latLngBounds(shown.map(g=>[g.lat,g.lng])),{padding:[80,80],maxZoom:6});
 renderQ(q);
 }
 
 function renderQ(q){
 let pct=Math.round((qi/quizItems.length)*100);
 const ui=document.getElementById('ui');
-ui.innerHTML='<div class="top-bar"><div class="top-bar-row">'+
-'<button class="home-btn" id="homeBtn" title="Завершить">&#8592;</button>'+
-'<div class="info"><div class="q-text">Найди: '+q.name+'</div>'+
-'<div class="q-hint">'+(CL[q.cat]||q.cat)+' &middot; '+q.topic+'&nbsp;&nbsp;|&nbsp;&nbsp;'+(qi+1)+'/'+quizItems.length+'&nbsp;&nbsp;|&nbsp;&nbsp;'+qScore+' верно</div></div>'+
-'</div>'+
-'<div class="q-bar"><div class="q-fill" style="width:'+pct+'%"></div></div>'+
-'<div id="qfb"></div><div id="qnx"></div></div>';
+ui.innerHTML='<div class="top-bar"><div class="top-bar-row"><button class="home-btn" id="homeBtn" title="Завершить">&#8592;</button><div class="info"><div class="q-text">Найди: '+q.name+'</div><div class="q-hint">'+(CL[q.cat]||q.cat)+'&nbsp;&nbsp;|&nbsp;&nbsp;'+(qi+1)+'/'+quizItems.length+'&nbsp;&nbsp;|&nbsp;&nbsp;'+qScore+' верно</div></div></div><div class="q-bar"><div class="q-fill" style="width:'+pct+'%"></div></div><div id="qfb"></div><div id="qnx"></div></div>';
 document.getElementById('homeBtn').onclick=()=>{if(confirm('Завершить тест и вернуться в меню?'))showMenu()};
 }
 
 function clickPin(marker,g){
-if(qAnswered)return;
-let q=quizItems[qi];
-let fb=document.getElementById('qfb');
-let nx=document.getElementById('qnx');
-qAnswered=true;
+if(qAnswered)return;let q=quizItems[qi];let fb=document.getElementById('qfb');let nx=document.getElementById('qnx');qAnswered=true;
 if(g.name===q.name){
-qScore++;
-marker.setIcon(mkPin('#16a34a','pin-correct'));
-marker.bindTooltip(g.name,{className:'tooltip-name',direction:'top',offset:[0,-10],permanent:true}).openTooltip();
-markers.forEach(m=>{if(m!==marker)m.setIcon(mkPin('#999','pin-dim'))});
-fb.className='q-feedback ok';fb.textContent='Верно!';fb.style.display='block';
+qScore++;marker.setIcon(mkPin('#16a34a','pin-correct'));marker.bindTooltip(g.name,{className:'tooltip-name',direction:'top',offset:[0,-10],permanent:true}).openTooltip();markers.forEach(m=>{if(m!==marker)m.setIcon(mkPin('#999','pin-dim'))});fb.className='q-feedback ok';fb.textContent='Верно!';fb.style.display='block';
 }else{
-marker.setIcon(mkPin('#dc2626','pin-wrong'));
-marker.bindTooltip(g.name,{className:'tooltip-name',direction:'top',offset:[0,-10],permanent:true}).openTooltip();
+marker.setIcon(mkPin('#dc2626','pin-wrong'));marker.bindTooltip(g.name,{className:'tooltip-name',direction:'top',offset:[0,-10],permanent:true}).openTooltip();
 let cm=markers.find(m=>m._geo&&m._geo.name===q.name);
 if(cm){cm.setIcon(mkPin('#f59e0b','pin-target'));cm.bindTooltip(q.name,{className:'tooltip-name',direction:'top',offset:[0,-10],permanent:true}).openTooltip()}
 markers.forEach(m=>{if(m!==marker&&m!==cm)m.setIcon(mkPin('#999','pin-dim'))});
@@ -668,74 +515,25 @@ document.getElementById('nxBtn').onclick=()=>{qi++;if(qi<quizItems.length)showQ(
 }
 
 function showResults(){
-clearMap();
-let pct=Math.round((qScore/quizItems.length)*100);
-let msg='';
+clearMap();let pct=Math.round((qScore/quizItems.length)*100);let msg='';
 if(pct>=90)msg='Отличный результат! Ты прекрасно знаешь карту!';
 else if(pct>=70)msg='Хороший результат! Осталось подтянуть некоторые объекты.';
 else if(pct>=50)msg='Неплохо, но стоит ещё потренироваться.';
 else msg='Нужно поработать ещё. Попробуй сначала режим изучения!';
 let mh='';
-if(qMistakes.length){
-mh='<div class="mistakes-box"><p style="font-weight:600;margin-bottom:8px;font-size:13px">Ошибки:</p>';
-qMistakes.forEach(m=>{mh+='<div class="mi">Искал: <strong>'+m.asked+'</strong> — нажал: <span>'+m.clicked+'</span></div>'});
-mh+='</div>';
-}
-let errList=qMistakes.map(m=>m.asked+'->'+m.clicked).join('; ');
-sendToSheet({
-action:'test',
-total:quizItems.length,
-correct:qScore,
-percent:pct,
-categories:[...selectedCats].map(c=>CL[c]||c).join(', '),
-errors:errList||'нет'
-});
+if(qMistakes.length){mh='<div class="mistakes-box"><p style="font-weight:600;margin-bottom:8px;font-size:13px">Ошибки:</p>';qMistakes.forEach(m=>{mh+='<div class="mi">Искал: <strong>'+m.asked+'</strong> — нажал: <span>'+m.clicked+'</span></div>'});mh+='</div>'}
+sendToSheet({action:'test',total:quizItems.length,correct:qScore,percent:pct,categories:[...selectedCats].map(c=>CL[c]||c).join(', '),errors:qMistakes.map(m=>m.asked+'->'+m.clicked).join('; ')||'нет'});
 const ui=document.getElementById('ui');
-ui.innerHTML='<div class="score-panel">'+
-'<div class="big">'+pct+'%</div>'+
-'<div class="lbl">'+qScore+' из '+quizItems.length+' правильно</div>'+
-'<div class="msg">'+msg+'</div>'+mh+
-'<p class="sending-note" id="sendNote"></p>'+
-'<div style="margin-top:16px">'+
-'<button class="primary" id="retryBtn">Ещё раз</button>'+
-'<button id="studyBtn">Изучение</button>'+
-'<button id="homeBtn2">В меню</button>'+
-'</div></div>';
+ui.innerHTML='<div class="score-panel"><div class="big">'+pct+'%</div><div class="lbl">'+qScore+' из '+quizItems.length+' правильно</div><div class="msg">'+msg+'</div>'+mh+'<p class="sending-note" id="sendNote"></p><div style="margin-top:16px"><button class="primary" id="retryBtn">Ещё раз</button><button id="studyBtn">Изучение</button><button id="homeBtn2">В меню</button></div></div>';
 document.getElementById('retryBtn').onclick=startQuiz;
 document.getElementById('studyBtn').onclick=startStudy;
 document.getElementById('homeBtn2').onclick=showMenu;
 }
 
 function sendToSheet(data){
-if(!SCRIPT_URL){console.log('SCRIPT_URL не задан, статистика не отправляется',data);return}
-if(!currentUser)return;
-let now=new Date();
-let payload={
-timestamp:now.toLocaleString('ru-RU'),
-surname:currentUser.surname,
-name:currentUser.name,
-cls:currentUser.cls,
-action:data.action,
-categories:data.categories||'',
-count:data.count||'',
-total:data.total||'',
-correct:data.correct||'',
-percent:data.percent||'',
-errors:data.errors||''
-};
-fetch(SCRIPT_URL,{
-method:'POST',
-mode:'no-cors',
-headers:{'Content-Type':'application/json'},
-body:JSON.stringify(payload)
-}).then(()=>{
-let el=document.getElementById('sendNote');
-if(el)el.textContent='Результат отправлен учителю';
-}).catch(e=>{
-console.warn('Ошибка отправки:',e);
-let el=document.getElementById('sendNote');
-if(el)el.textContent='Не удалось отправить (нет интернета?)';
-});
+if(!SCRIPT_URL)return;if(!currentUser)return;
+let payload={timestamp:new Date().toLocaleString('ru-RU'),surname:currentUser.surname,name:currentUser.name,cls:currentUser.cls,action:data.action,categories:data.categories||'',count:data.count||'',total:data.total||'',correct:data.correct||'',percent:data.percent||'',errors:data.errors||''};
+fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}).then(()=>{let el=document.getElementById('sendNote');if(el)el.textContent='Результат отправлен учителю'}).catch(()=>{let el=document.getElementById('sendNote');if(el)el.textContent='Не удалось отправить (нет интернета?)'});
 }
 
 showLogin();
