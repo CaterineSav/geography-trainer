@@ -89,6 +89,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .legend .leg-item{display:flex;align-items:center;gap:6px;padding:2px 0}
 .legend .leg-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
 .legend .leg-count{color:#888;margin-left:auto;padding-left:8px}
+.map-style-grid{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+.map-style-btn{padding:8px 14px;font-size:12px;border:1.5px solid #ddd;border-radius:10px;background:#fff;cursor:pointer;transition:.15s;display:flex;align-items:center;gap:6px;white-space:nowrap}
+.map-style-btn:hover{background:#f0f0f0;border-color:#bbb}
+.map-style-btn.active{background:#2563eb;color:#fff;border-color:#2563eb}
+.map-style-btn .ms-icon{font-size:16px}
 </style>
 </head>
 <body>
@@ -393,6 +398,14 @@ const CL={"равнины":"Равнины","горы":"Горы","вершин�
 let map,markers=[],selectedCats=new Set(CATEGORIES);
 let quizItems=[],qi=0,qScore=0,qMistakes=[],qAnswered=false;
 let currentUser=null,sessionStart=null;
+let currentTileLayer=null;
+let currentMapStyle='standard_ru';
+const MAP_STYLES={
+standard_ru:{name:'Стандартная',icon:'&#127758;',url:'https://mt{s}.google.com/vt/lyrs=m&hl=ru&x={x}&y={y}&z={z}',opts:{subdomains:'0123',maxZoom:18,attribution:'&copy; Google'}},
+terrain:{name:'С рельефом',icon:'&#9968;',url:'https://mt{s}.google.com/vt/lyrs=p&hl=ru&x={x}&y={y}&z={z}',opts:{subdomains:'0123',maxZoom:18,attribution:'&copy; Google'}},
+terrain_only:{name:'Рельеф (без подписей)',icon:'&#127956;',url:'https://mt{s}.google.com/vt/lyrs=t&hl=ru&x={x}&y={y}&z={z}',opts:{subdomains:'0123',maxZoom:18,attribution:'&copy; Google'}},
+satellite:{name:'Спутник',icon:'&#128752;',url:'https://mt{s}.google.com/vt/lyrs=s&hl=ru&x={x}&y={y}&z={z}',opts:{subdomains:'0123',maxZoom:18,attribution:'&copy; Google'}}
+};
 
 function loadUser(){try{let s=localStorage.getItem('geo7_user');if(s)return JSON.parse(s)}catch(e){}return null}
 function saveUser(u){try{localStorage.setItem('geo7_user',JSON.stringify(u))}catch(e){}}
@@ -430,9 +443,14 @@ showMenu();
 function initMap(){
 map=L.map('map',{center:[30,30],zoom:3,minZoom:2,maxZoom:10,worldCopyJump:true,zoomControl:false});
 L.control.zoom({position:'topright'}).addTo(map);
-L.tileLayer('https://mt{s}.google.com/vt/lyrs=m&hl=ru&x={x}&y={y}&z={z}',{
-subdomains:'0123',maxZoom:18,attribution:'&copy; Google'
-}).addTo(map);
+setMapStyle(currentMapStyle);
+}
+function setMapStyle(key){
+currentMapStyle=key;
+let s=MAP_STYLES[key];
+if(currentTileLayer)map.removeLayer(currentTileLayer);
+currentTileLayer=L.tileLayer(s.url,s.opts).addTo(map);
+document.querySelectorAll('.map-style-btn').forEach(b=>{b.classList.toggle('active',b.dataset.style===key)});
 }
 
 function mkPin(color,cls){return L.divIcon({className:'',html:'<div class="pin-default '+(cls||'')+'" style="background:'+color+'"></div>',iconSize:[18,18],iconAnchor:[9,9]})}
@@ -451,8 +469,10 @@ function renderMenu(){
 const ui=document.getElementById('ui');
 let selAll=selectedCats.size===CATEGORIES.length;
 let catHtml=CATEGORIES.map(c=>{let cnt=GEO.filter(g=>g.cat===c).length;return '<button class="cat-btn '+(selectedCats.has(c)?'active':'')+'" data-cat="'+c+'"><span class="dot" style="background:'+(selectedCats.has(c)?'#fff':CC[c])+'"></span>'+(CL[c]||c)+' <span style="opacity:.6;font-size:11px">('+cnt+')</span></button>'}).join('');
-ui.innerHTML='<div class="panel">'+userBadgeHtml()+'<h1>Номенклатура 7 класс</h1><p class="sub">Выбери категории, затем режим</p><p class="section-label">Категории</p><div style="margin-bottom:8px"><button class="cat-btn" id="allBtn" style="font-weight:600">'+(selAll?'Снять все':'Выбрать все')+'</button></div><div class="cat-grid">'+catHtml+'</div><p class="section-label">Режим</p><div class="mode-row"><div class="mode-card" id="mStudy"><div class="icon">&#128214;</div><div class="label">Изучение</div><div class="desc">Все объекты с подписями</div></div><div class="mode-card" id="mTest"><div class="icon">&#127919;</div><div class="label">Тест</div><div class="desc">Найди объект на карте</div></div></div></div>';
+let styleHtml=Object.keys(MAP_STYLES).map(k=>{let s=MAP_STYLES[k];return '<button class="map-style-btn '+(currentMapStyle===k?'active':'')+'" data-style="'+k+'"><span class="ms-icon">'+s.icon+'</span>'+s.name+'</button>'}).join('');
+ui.innerHTML='<div class="panel">'+userBadgeHtml()+'<h1>Номенклатура 7 класс</h1><p class="sub">Выбери категории, затем режим</p><p class="section-label">Вид карты</p><div class="map-style-grid">'+styleHtml+'</div><p class="section-label">Категории</p><div style="margin-bottom:8px"><button class="cat-btn" id="allBtn" style="font-weight:600">'+(selAll?'Снять все':'Выбрать все')+'</button></div><div class="cat-grid">'+catHtml+'</div><p class="section-label">Режим</p><div class="mode-row"><div class="mode-card" id="mStudy"><div class="icon">&#128214;</div><div class="label">Изучение</div><div class="desc">Все объекты с подписями</div></div><div class="mode-card" id="mTest"><div class="icon">&#127919;</div><div class="label">Тест</div><div class="desc">Найди объект на карте</div></div></div></div>';
 ui.querySelectorAll('.cat-btn[data-cat]').forEach(b=>{b.onclick=()=>{let c=b.dataset.cat;if(selectedCats.has(c))selectedCats.delete(c);else selectedCats.add(c);showMenu()}});
+ui.querySelectorAll('.map-style-btn').forEach(b=>{b.onclick=()=>{setMapStyle(b.dataset.style)}});
 document.getElementById('allBtn').onclick=()=>{if(selAll)selectedCats.clear();else CATEGORIES.forEach(c=>selectedCats.add(c));showMenu()};
 document.getElementById('mStudy').onclick=()=>{if(selectedCats.size===0)return;startStudy()};
 document.getElementById('mTest').onclick=()=>{if(selectedCats.size===0)return;startQuiz()};
