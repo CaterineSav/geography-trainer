@@ -94,6 +94,32 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .map-style-btn:hover{background:#f0f0f0;border-color:#bbb}
 .map-style-btn.active{background:#2563eb;color:#fff;border-color:#2563eb}
 .map-style-btn .ms-icon{font-size:16px}
+@media(max-width:480px){
+.login-card{padding:24px 20px;border-radius:14px}
+.login-card h1{font-size:19px}
+.login-card .emoji-top{font-size:36px;margin-bottom:8px}
+.panel{left:8px;top:8px;width:calc(100% - 16px);max-width:none;padding:16px;border-radius:12px;max-height:calc(100vh - 16px)}
+.panel h1{font-size:16px}
+.top-bar{left:8px;top:8px;width:calc(100% - 16px);max-width:none;padding:12px 14px;border-radius:12px}
+.q-text{font-size:15px;margin-top:8px}
+.q-hint{font-size:12px}
+.q-feedback{font-size:13px;padding:8px 10px;margin-top:6px}
+.q-next{padding:10px 16px;font-size:13px;width:100%}
+.score-panel{min-width:auto;width:calc(100% - 32px);padding:24px 20px;border-radius:14px}
+.score-panel .big{font-size:40px}
+.score-panel .msg{font-size:14px}
+.score-panel button{padding:10px 16px;font-size:13px;width:100%;margin:4px 0}
+.legend{bottom:auto;top:8px;right:8px;padding:8px 10px;font-size:11px;max-height:40vh;max-width:140px}
+.cat-btn{padding:6px 10px;font-size:11px}
+.map-style-btn{padding:6px 10px;font-size:11px}
+.mode-card{padding:10px}
+.mode-card .label{font-size:13px}
+.mode-card .desc{font-size:10px}
+.pin-default{width:22px;height:22px;border-width:3px}
+.user-badge{font-size:11px}
+.section-label{font-size:11px}
+.mode-row{flex-direction:column;gap:6px}
+}
 </style>
 </head>
 <body>
@@ -453,7 +479,8 @@ currentTileLayer=L.tileLayer(s.url,s.opts).addTo(map);
 document.querySelectorAll('.map-style-btn').forEach(b=>{b.classList.toggle('active',b.dataset.style===key)});
 }
 
-function mkPin(color,cls){return L.divIcon({className:'',html:'<div class="pin-default '+(cls||'')+'" style="background:'+color+'"></div>',iconSize:[18,18],iconAnchor:[9,9]})}
+function isMobile(){return window.innerWidth<=480}
+function mkPin(color,cls){let sz=isMobile()?24:18;return L.divIcon({className:'',html:'<div class="pin-default '+(cls||'')+'" style="background:'+color+';width:'+sz+'px;height:'+sz+'px"></div>',iconSize:[sz,sz],iconAnchor:[sz/2,sz/2]})}
 function clearMap(){markers.forEach(m=>map.removeLayer(m));markers=[]}
 function shuffle(a){for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 function userBadgeHtml(){if(!currentUser)return '';let init=(currentUser.surname[0]||'')+(currentUser.name[0]||'');return '<div class="user-badge"><div class="avatar">'+init.toUpperCase()+'</div>'+currentUser.surname+' '+currentUser.name+' ('+currentUser.cls+')'+'<span class="logout" title="Сменить ученика" onclick="logout()">&#10005;</span></div>'}
